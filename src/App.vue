@@ -1,65 +1,80 @@
 <template>
-<h1>{{title}}</h1>
-<p> Welcome to this new world</p>
-<div v-if="showModal">
-   <modal  theme="sale" @close="toggleModal">
-     <h1>Hello,Welcome to VUE</h1>
-     <p>This is the conent</p>
-     <template v-slot:links>
-       <a href="#"> Sign Up </a>
-       <a href="#"> Learn more </a>
-     </template>
-   </modal>
-</div>
-<div v-if="showModal2">
-   <modal  theme="sale" @close="toggleModal2">
-     <h1>This is Modal Two</h1>
-     <p>Learning vue is awesome</p>
-     <template v-slot:sign >
-       <a href="#"> Sign Up for the newsletter </a>
-       <a href="#"> Learn more</a>
-     </template>
-   </modal>
-</div>
-<div >
-  <button v-if="!showModal" @click="toggleModal">Show Modal One</button>
-  <button v-if="!showModal2" @click="toggleModal2">Show Modal Two</button>
-</div>
+
+  
+  <div id="play">
+      <h2>Ninja Reaction Timer</h2>
+      <button @click="start" :disabled="isPlaying">play</button>
+  </div>
+  
+    <Block v-if="isPlaying" :delay="delay" @end="endGame"/>
+
+    <Results v-if="showResults" :score="score" />
+
 </template>
  
 <script>
 
-import Modal from '@/components/Modal'
+import Block from '@/components/Block'
+import Results from '@/components/Results'
 
 export default {
-  name: 'App',
-  components: {
-    modal: Modal
+  
+
+  components:{
+    Block, Results
   },
-  data() {
-    return {
-      title: 'Welcome',
-      content: 'This is the content',
-      showModal: false,
-      showModal2:false,
+  data(){
+    return{
+      isPlaying: false,
+      delay: null,
+      score: null,
+      showResults: false  
+    }
+  },
+  methods:{
+    start(){
+      this.delay = 2000 + Math.random() * 5000 
+      this.isPlaying = true
+      this.showResults=false
+
+    },
+    endGame(reactionTime){
+      this.score = reactionTime
+      this.isPlaying =false
+      this.showResults=true
       
     }
-  },
-  methods: {
-
-    toggleModal:function(){
-      this.showModal =! this.showModal
-    },
-    toggleModal2(){
-      this.showModal2 = !this.showModal2
-    }
+    
   }
 }
 </script>
 
-<style scoped>
-  #modal, h1,p,div{
-    margin: 20px auto;
+<style>
+
+
+  #app{
+    font-family: Avenir, Helvetica, Arial;
     text-align: center;
+    margin-top:60px;
+    color: #444;
   }
+  
+ 
+   button{
+    color:#fff;
+    background: #0faf87;
+    padding:8px 16px;
+    border-radius:4px;
+    font-size: 16px;
+    letter-spacing:1px;
+    cursor: pointer;
+    border: none;
+    margin: 10px;
+  } 
+  button[disabled]{
+    cursor: not-allowed;
+    opacity: .2;
+
+  }
+
 </style>
